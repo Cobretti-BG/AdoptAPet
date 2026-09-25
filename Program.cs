@@ -1,5 +1,9 @@
 namespace AdoptAPet
 {
+    using Microsoft.EntityFrameworkCore;
+    
+    using Data;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -8,6 +12,8 @@ namespace AdoptAPet
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
