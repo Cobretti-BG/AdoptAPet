@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="AdoptAPet.Common/AdoptAPet.Common.csproj" />
+  <Project Path="AdoptAPet.Data/AdoptAPet.Data.csproj" />
+  <Project Path="AdoptAPet.Service/AdoptAPet.Service.csproj" />
+  <Project Path="AdoptAPet.Web/AdoptAPet.Web.csproj" />
+</Solution>
