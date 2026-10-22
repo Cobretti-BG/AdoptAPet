@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace AdoptAPet.Web.Data.Migrations
+namespace AdoptAPet.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
