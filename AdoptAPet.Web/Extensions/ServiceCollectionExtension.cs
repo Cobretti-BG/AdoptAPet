@@ -1,5 +1,5 @@
 ﻿using AdoptAPet.Data;
-using Microsoft.AspNetCore.Identity;
+using AdoptAPet.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdoptAPet.Web.Extensions
@@ -24,7 +24,7 @@ namespace AdoptAPet.Web.Extensions
         public static IServiceCollection AddApplicationIdentity(
             this IServiceCollection services)
         {
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<ApplicationUser>(options =>
                     options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
