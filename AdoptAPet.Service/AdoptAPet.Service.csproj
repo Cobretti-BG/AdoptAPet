@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AdoptAPet.Common\AdoptAPet.Common.csproj" />
+    <ProjectReference Include="..\AdoptAPet.Data\AdoptAPet.Data.csproj" />
+  </ItemGroup>
+
 </Project>
