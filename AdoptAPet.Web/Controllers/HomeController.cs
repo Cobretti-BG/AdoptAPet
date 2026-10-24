@@ -1,9 +1,10 @@
-using AdoptAPet.Web.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-
 namespace AdoptAPet.Web.Controllers
 {
+    using System.Diagnostics;
+
+    using Microsoft.AspNetCore.Mvc;
+
+    using Web.Models;
     public class HomeController : Controller
     {
         public IActionResult Index()

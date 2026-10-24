@@ -119,7 +119,7 @@
 
             if (imageUrl != null &&
                 !string.IsNullOrWhiteSpace(imageUrl) &&
-                (!Uri.TryCreate(imageUrl.Trim(), UriKind.Absolute, out Uri uri) ||
+                (!Uri.TryCreate(imageUrl.Trim(), UriKind.Absolute, out Uri? uri) ||
                  (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)))
             {
                 return "Image URL must be a valid HTTP or HTTPS URL.";

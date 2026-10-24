@@ -1,12 +1,12 @@
-﻿using AdoptAPet.Data;
-using AdoptAPet.Data.Models;
-using Microsoft.EntityFrameworkCore;
-
-using AdoptAPet.Service.Contracts;
-using AdoptAPet.Service.Services;
-
-namespace AdoptAPet.Web.Extensions
+﻿namespace AdoptAPet.Web.Extensions
 {
+    using Microsoft.EntityFrameworkCore;
+
+    using Data;
+    using Data.Models;
+
+    using Service.Contracts;
+    using Service.Services;
     public static class ServiceCollectionExtension
     {
         public static IServiceCollection AddApplicationDbContext(
@@ -38,6 +38,7 @@ namespace AdoptAPet.Web.Extensions
         this IServiceCollection services)
         {
             services.AddScoped<IPetService, PetService>();
+            services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
 
             return services;
         }

@@ -1,8 +1,6 @@
-
-using AdoptAPet.Web.Extensions;
-
 namespace AdoptAPet.Web
 {
+    using Extensions;
     public class Program
     {
         public static void Main(string[] args)
