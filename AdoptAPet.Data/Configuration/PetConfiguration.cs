@@ -1,10 +1,11 @@
-﻿using AdoptAPet.Data.Models;
-using static AdoptAPet.Common.EntityValidation.Pet;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace AdoptAPet.Data.Configuration
+﻿namespace AdoptAPet.Data.Configuration
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+    using Data.Models;
+
+    using static Common.EntityValidation.Pet;
     public class PetConfiguration : IEntityTypeConfiguration<Pet>
     {
         public void Configure(EntityTypeBuilder<Pet> builder)

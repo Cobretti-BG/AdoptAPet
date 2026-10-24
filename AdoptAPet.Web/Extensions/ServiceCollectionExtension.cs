@@ -2,6 +2,9 @@
 using AdoptAPet.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
+using AdoptAPet.Service.Contracts;
+using AdoptAPet.Service.Services;
+
 namespace AdoptAPet.Web.Extensions
 {
     public static class ServiceCollectionExtension
@@ -27,6 +30,14 @@ namespace AdoptAPet.Web.Extensions
             services.AddDefaultIdentity<ApplicationUser>(options =>
                     options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddApplicationServices(
+        this IServiceCollection services)
+        {
+            services.AddScoped<IPetService, PetService>();
 
             return services;
         }

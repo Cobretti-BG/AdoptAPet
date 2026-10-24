@@ -1,10 +1,9 @@
-﻿using AdoptAPet.Data.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-
-namespace AdoptAPet.Data
+﻿namespace AdoptAPet.Data
 {
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+
+    using Models;
     public class ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options)
         : IdentityDbContext<ApplicationUser>(options)

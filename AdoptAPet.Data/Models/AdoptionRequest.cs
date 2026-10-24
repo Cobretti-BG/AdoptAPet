@@ -1,7 +1,6 @@
-﻿using AdoptAPet.Data.Models.Enums;
-
-namespace AdoptAPet.Data.Models
+﻿namespace AdoptAPet.Data.Models
 {
+    using Enums;
     public class AdoptionRequest
     {
         public int Id { get; set; }
