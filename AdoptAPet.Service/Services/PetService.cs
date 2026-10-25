@@ -14,6 +14,8 @@
     using DTOs;
     using Results;
     using Validators;
+    using Microsoft.EntityFrameworkCore.Storage;
+
     public class PetService : IPetService
     {
         private readonly ApplicationDbContext context;
@@ -183,6 +185,7 @@
             return ServiceResult.Success();
         }
 
+
         public async Task<ServiceResult> DeleteAsync(int id, string currentUserId)
         {
             if (string.IsNullOrWhiteSpace(currentUserId))
@@ -209,26 +212,33 @@
                     "You are not allowed to delete this pet listing.");
             }
 
-            if (pet.Status != PetStatus.Available)
-            {
-                return ServiceResult.Failure(
-                    ServiceErrorKeys.PetNotAvailable,
-                    "Only available pet listings can be deleted.");
-            }
+            bool hasPendingRequests = await context.AdoptionRequests
+                .AnyAsync(request =>
+                    request.PetId == id &&
+                    request.Status == AdoptionRequestStatus.Pending);
 
-            if (await context.AdoptionRequests.AnyAsync(r => r.PetId == id))
+            if (hasPendingRequests)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.PetHasAdoptionRequests,
-                    "This pet cannot be deleted because adoption requests exist.");
+                    "This pet cannot be deleted while pending adoption requests exist.");
             }
 
+            await using IDbContextTransaction transaction = await context.Database.BeginTransactionAsync();
+
+            List<AdoptionRequest> requests = await context.AdoptionRequests
+                .Where(request => request.PetId == id)
+                .ToListAsync();
+
+            context.AdoptionRequests.RemoveRange(requests);
             context.Pets.Remove(pet);
 
             await context.SaveChangesAsync();
+            await transaction.CommitAsync();
 
             return ServiceResult.Success();
         }
+
 
 
 

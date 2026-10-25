@@ -164,6 +164,8 @@
                 return View(model);
             }
 
+            TempData["SuccessMessage"] = "Pet listing created successfully.";
+
             return RedirectToAction(nameof(Details), new { id = result.Data });
         }
 
@@ -279,6 +281,8 @@
                 return View(model);
             }
 
+            TempData["SuccessMessage"] = "Pet listing updated successfully.";
+
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -312,14 +316,7 @@
                 return Forbid();
             }
 
-            if (pet.Status != PetStatus.Available)
-            {
-                TempData["ErrorMessage"] =
-                    "Only available pet listings can be deleted.";
-
-                return RedirectToAction(nameof(Details), new { id });
-            }
-
+            
             PetDetailsViewModel model = new PetDetailsViewModel
             {
                 Id = pet.Id,
@@ -343,6 +340,10 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
             string? userId = GetCurrentUserId();
 
             if (string.IsNullOrWhiteSpace(userId))
@@ -369,6 +370,8 @@
 
                 return RedirectToAction(nameof(Details), new { id });
             }
+
+            TempData["SuccessMessage"] = "Pet listing deleted successfully.";
 
             return RedirectToAction(nameof(Index));
         }
