@@ -7,6 +7,7 @@
     using Data.Models.Enums;
     using Service.Contracts;
     using Service.DTOs;
+    using Common;
 
     using ViewModels.Pets;
     using AdoptAPet.Service.Results;
@@ -50,7 +51,7 @@
         [HttpGet]
         public async Task<IActionResult> MyPets()
         {
-            string currentUserId = GetCurrentUserId();
+            string? currentUserId = GetCurrentUserId();
 
             if (string.IsNullOrWhiteSpace(currentUserId))
             {
@@ -199,7 +200,10 @@
 
             if (pet.Status != PetStatus.Available)
             {
-                return BadRequest("Only available pets can be edited.");
+                TempData["ErrorMessage"] =
+                    "Only available pet listings can be edited.";
+
+                return RedirectToAction(nameof(Details), new { id });
             }
 
             PetFormViewModel model = new PetFormViewModel
@@ -258,12 +262,12 @@
 
             if (!result.IsSuccess)
             {
-                if (result.ErrorKey == "PetNotFound")
+                if (result.ErrorKey == ServiceErrorKeys.PetNotFound)
                 {
                     return NotFound();
                 }
 
-                if (result.ErrorKey == "Unauthorized")
+                if (result.ErrorKey == ServiceErrorKeys.Unauthorized)
                 {
                     return Forbid();
                 }
@@ -310,7 +314,10 @@
 
             if (pet.Status != PetStatus.Available)
             {
-                return BadRequest("Only available pets can be deleted.");
+                TempData["ErrorMessage"] =
+                    "Only available pet listings can be deleted.";
+
+                return RedirectToAction(nameof(Details), new { id });
             }
 
             PetDetailsViewModel model = new PetDetailsViewModel
@@ -347,12 +354,12 @@
 
             if (!result.IsSuccess)
             {
-                if (result.ErrorKey == "PetNotFound")
+                if (result.ErrorKey == ServiceErrorKeys.PetNotFound)
                 {
                     return NotFound();
                 }
 
-                if (result.ErrorKey == "Unauthorized")
+                if (result.ErrorKey == ServiceErrorKeys.Unauthorized)
                 {
                     return Forbid();
                 }

@@ -2,6 +2,8 @@
 {
     using Microsoft.EntityFrameworkCore;
 
+    using Common;
+
     //Usings from the data layer
     using Data;
     using Data.Models;
@@ -30,7 +32,7 @@
             if (pet == null)
             {
                 return ServiceResult<PetDto>.Failure(
-                    "PetNotFound",
+                    ServiceErrorKeys.PetNotFound,
                     "The requested pet could not be found.");
             }
 
@@ -70,7 +72,7 @@
             if (dto == null)
             {
                 return ServiceResult<int>.Failure(
-                    "ValidationFailed",
+                    ServiceErrorKeys.ValidationFailed,
                     "Pet information is required.");
             }
 
@@ -79,14 +81,14 @@
             if (validationErrorCheck != null)
             {
                 return ServiceResult<int>.Failure(
-                    "ValidationFailed",
+                    ServiceErrorKeys.ValidationFailed,
                     validationErrorCheck);
             }
 
             if (string.IsNullOrWhiteSpace(ownerId))
             {
                 return ServiceResult<int>.Failure(
-                    "UserNotAuthenticated",
+                    ServiceErrorKeys.UserNotAuthenticated,
                     "A valid user is required to create a pet listing.");
             }
 
@@ -96,7 +98,7 @@
             if (!ownerExists)
             {
                 return ServiceResult<int>.Failure(
-                    "UserNotFound",
+                    ServiceErrorKeys.UserNotFound,
                     "The specified user could not be found.");
             }
 
@@ -131,14 +133,14 @@
             if (validationErrorCheck != null)
             {
                 return ServiceResult.Failure(
-                    "ValidationFailed",
+                    ServiceErrorKeys.ValidationFailed,
                     validationErrorCheck);
             }
 
             if (string.IsNullOrWhiteSpace(currentUserId))
             {
                 return ServiceResult.Failure(
-                    "UserNotAuthenticated",
+                    ServiceErrorKeys.UserNotAuthenticated,
                     "A valid user is required to update a pet listing.");
             }
 
@@ -148,21 +150,21 @@
             if (pet == null)
             {
                 return ServiceResult.Failure(
-                    "PetNotFound",
+                    ServiceErrorKeys.PetNotFound,
                     "The requested pet could not be found.");
             }
 
             if (pet.OwnerId != currentUserId)
             {
                 return ServiceResult.Failure(
-                    "Unauthorized",
+                    ServiceErrorKeys.Unauthorized,
                     "You are not allowed to update this pet listing.");
             }
 
             if (pet.Status != PetStatus.Available)
             {
                 return ServiceResult.Failure(
-                    "PetNotAvailable",
+                    ServiceErrorKeys.PetNotAvailable,
                     "Only available pet listings can be updated.");
             }
 
@@ -186,7 +188,7 @@
             if (string.IsNullOrWhiteSpace(currentUserId))
             {
                 return ServiceResult.Failure(
-                    "UserNotAuthenticated",
+                    ServiceErrorKeys.UserNotAuthenticated,
                     "A valid user is required to delete a pet listing.");
             }
 
@@ -196,28 +198,28 @@
             if (pet == null)
             {
                 return ServiceResult.Failure(
-                    "PetNotFound",
+                    ServiceErrorKeys.PetNotFound,
                     "The requested pet could not be found.");
             }
 
             if (pet.OwnerId != currentUserId)
             {
                 return ServiceResult.Failure(
-                    "Unauthorized",
+                    ServiceErrorKeys.Unauthorized,
                     "You are not allowed to delete this pet listing.");
             }
 
             if (pet.Status != PetStatus.Available)
             {
                 return ServiceResult.Failure(
-                    "PetNotAvailable",
+                    ServiceErrorKeys.PetNotAvailable,
                     "Only available pet listings can be deleted.");
             }
 
             if (await context.AdoptionRequests.AnyAsync(r => r.PetId == id))
             {
                 return ServiceResult.Failure(
-                    "PetHasAdoptionRequests",
+                    ServiceErrorKeys.PetHasAdoptionRequests,
                     "This pet cannot be deleted because adoption requests exist.");
             }
 

@@ -10,6 +10,7 @@
     using Service.Contracts;
     using Service.DTOs;
     using Service.Results;
+    using Common;
 
     using ViewModels.AdoptionRequests;
 
@@ -42,7 +43,13 @@
 
             if (result.Data.Status != PetStatus.Available)
             {
-                return BadRequest("This pet is no longer available for adoption.");
+                TempData["ErrorMessage"] =
+                    "This pet is no longer available for adoption.";
+
+                return RedirectToAction(
+                    "Details",
+                    "Pets",
+                    new { id = petId });
             }
 
             string? currentUserId = GetCurrentUserId();
@@ -183,9 +190,14 @@
 
             if (!result.IsSuccess || result.Data == null)
             {
-                if (result.ErrorKey == "PetNotFound")
+                if (result.ErrorKey == ServiceErrorKeys.PetNotFound)
                 {
                     return NotFound();
+                }
+
+                if (result.ErrorKey == ServiceErrorKeys.Unauthorized)
+                {
+                    return Forbid();
                 }
 
                 return View("Error");
@@ -227,12 +239,12 @@
 
             if (!result.IsSuccess)
             {
-                if (result.ErrorKey == "RequestNotFound")
+                if (result.ErrorKey == ServiceErrorKeys.RequestNotFound)
                 {
                     return NotFound();
                 }
 
-                if (result.ErrorKey == "Unauthorized")
+                if (result.ErrorKey == ServiceErrorKeys.Unauthorized)
                 {
                     return Forbid();
                 }
@@ -265,12 +277,12 @@
 
             if (!result.IsSuccess)
             {
-                if (result.ErrorKey == "RequestNotFound")
+                if (result.ErrorKey == ServiceErrorKeys.RequestNotFound)
                 {
                     return NotFound();
                 }
 
-                if (result.ErrorKey == "Unauthorized")
+                if (result.ErrorKey == ServiceErrorKeys.Unauthorized)
                 {
                     return Forbid();
                 }
@@ -304,12 +316,12 @@
 
             if (!result.IsSuccess)
             {
-                if (result.ErrorKey == "RequestNotFound")
+                if (result.ErrorKey == ServiceErrorKeys.RequestNotFound)
                 {
                     return NotFound();
                 }
 
-                if (result.ErrorKey == "Unauthorized")
+                if (result.ErrorKey == ServiceErrorKeys.Unauthorized)
                 {
                     return Forbid();
                 }

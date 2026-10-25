@@ -2,6 +2,8 @@
 {
     using Microsoft.EntityFrameworkCore;
 
+    using Common;
+
     //Usings from the Data layer
     using Data;
     using Data.Models;
@@ -28,7 +30,7 @@
             if (dto is null)
             {
                 return ServiceResult<int>.Failure(
-                    "ValidationFailed",
+                    ServiceErrorKeys.ValidationFailed,
                     "Adoption request information is required.");
             }
 
@@ -37,14 +39,14 @@
             if (validationErrorCheck != null)
             {
                 return ServiceResult<int>.Failure(
-                    "ValidationFailed",
+                    ServiceErrorKeys.ValidationFailed,
                     validationErrorCheck);
             }
 
             if (string.IsNullOrWhiteSpace(applicantId))
             {
                 return ServiceResult<int>.Failure(
-                    "UserNotAuthenticated",
+                    ServiceErrorKeys.UserNotAuthenticated,
                     "A valid user is required to submit an adoption request.");
             }
 
@@ -54,21 +56,21 @@
             if (pet == null)
             {
                 return ServiceResult<int>.Failure(
-                    "PetNotFound",
+                    ServiceErrorKeys.PetNotFound,
                     "The requested pet could not be found.");
             }
 
             if (pet.OwnerId == applicantId)
             {
                 return ServiceResult<int>.Failure(
-                    "CannotAdoptOwnPet",
+                    ServiceErrorKeys.CannotAdoptOwnPet,
                     "You cannot submit an adoption request for your own pet.");
             }
 
             if (pet.Status != PetStatus.Available)
             {
                 return ServiceResult<int>.Failure(
-                    "PetNotAvailable",
+                    ServiceErrorKeys.PetNotAvailable,
                     "This pet is not currently available for adoption.");
             }
 
@@ -78,7 +80,7 @@
             if (!applicantExists)
             {
                 return ServiceResult<int>.Failure(
-                    "UserNotFound",
+                    ServiceErrorKeys.UserNotFound,
                     "The applicant could not be found.");
             }
 
@@ -91,7 +93,7 @@
             if (hasPendingRequest)
             {
                 return ServiceResult<int>.Failure(
-                    "DuplicateRequest",
+                    ServiceErrorKeys.DuplicateRequest,
                     "You already have a pending request for this pet.");
             }
 
@@ -117,7 +119,7 @@
             {
                 return ServiceResult<IReadOnlyCollection<AdoptionRequestDto>>
                     .Failure(
-                        "UserNotAuthenticated",
+                        ServiceErrorKeys.UserNotAuthenticated,
                         "A valid user is required to retrieve adoption requests.");
             }
 
@@ -149,7 +151,7 @@
             {
                 return ServiceResult<IReadOnlyCollection<AdoptionRequestDto>>
                     .Failure(
-                        "UserNotAuthenticated",
+                        ServiceErrorKeys.UserNotAuthenticated,
                         "A valid user is required to retrieve adoption requests.");
             }
 
@@ -157,7 +159,7 @@
             {
                 return ServiceResult<IReadOnlyCollection<AdoptionRequestDto>>
                     .Failure(
-                        "InvalidPetId",
+                        ServiceErrorKeys.InvalidPetId,
                         "A valid pet must be selected.");
             }
 
@@ -168,7 +170,7 @@
             {
                 return ServiceResult<IReadOnlyCollection<AdoptionRequestDto>>
                     .Failure(
-                        "PetNotFound",
+                        ServiceErrorKeys.PetNotFound,
                         "The requested pet could not be found.");
             }
 
@@ -199,14 +201,14 @@
             if (string.IsNullOrWhiteSpace(currentUserId))
             {
                 return ServiceResult.Failure(
-                    "UserNotAuthenticated",
+                    ServiceErrorKeys.UserNotAuthenticated,
                     "A valid user is required to cancel an adoption request.");
             }
 
             if (requestId <= 0)
             {
                 return ServiceResult.Failure(
-                    "InvalidRequestId",
+                    ServiceErrorKeys.InvalidRequestId,
                     "A valid adoption request must be selected.");
             }
 
@@ -216,21 +218,21 @@
             if (request == null)
             {
                 return ServiceResult.Failure(
-                    "RequestNotFound",
+                    ServiceErrorKeys.RequestNotFound,
                     "The adoption request could not be found.");
             }
 
             if (request.ApplicantId != currentUserId)
             {
                 return ServiceResult.Failure(
-                    "Unauthorized",
+                    ServiceErrorKeys.Unauthorized,
                     "You are not allowed to cancel this adoption request.");
             }
 
             if (request.Status != AdoptionRequestStatus.Pending)
             {
                 return ServiceResult.Failure(
-                    "RequestNotPending",
+                    ServiceErrorKeys.RequestNotPending,
                     "Only pending adoption requests can be cancelled.");
             }
 
@@ -247,14 +249,14 @@
             if (string.IsNullOrWhiteSpace(currentUserId))
             {
                 return ServiceResult.Failure(
-                    "UserNotAuthenticated",
+                    ServiceErrorKeys.UserNotAuthenticated,
                     "A valid user is required to reject an adoption request.");
             }
 
             if (requestId <= 0)
             {
                 return ServiceResult.Failure(
-                    "InvalidRequestId",
+                    ServiceErrorKeys.InvalidRequestId,
                     "A valid adoption request must be selected.");
             }
 
@@ -265,21 +267,21 @@
             if (request == null)
             {
                 return ServiceResult.Failure(
-                    "RequestNotFound",
+                    ServiceErrorKeys.RequestNotFound,
                     "The adoption request could not be found.");
             }
 
             if (request.Pet.OwnerId != currentUserId)
             {
                 return ServiceResult.Failure(
-                    "Unauthorized",
+                    ServiceErrorKeys.Unauthorized,
                     "You are not allowed to reject this adoption request.");
             }
 
             if (request.Status != AdoptionRequestStatus.Pending)
             {
                 return ServiceResult.Failure(
-                    "RequestNotPending",
+                    ServiceErrorKeys.RequestNotPending,
                     "Only pending adoption requests can be rejected.");
             }
 
@@ -296,14 +298,14 @@
             if (string.IsNullOrWhiteSpace(currentUserId))
             {
                 return ServiceResult.Failure(
-                    "UserNotAuthenticated",
+                    ServiceErrorKeys.UserNotAuthenticated,
                     "A valid user is required to approve an adoption request.");
             }
 
             if (requestId <= 0)
             {
                 return ServiceResult.Failure(
-                    "InvalidRequestId",
+                    ServiceErrorKeys.InvalidRequestId,
                     "A valid adoption request must be selected.");
             }
 
@@ -314,28 +316,28 @@
             if (request == null)
             {
                 return ServiceResult.Failure(
-                    "RequestNotFound",
+                    ServiceErrorKeys.RequestNotFound,
                     "The adoption request could not be found.");
             }
 
             if (request.Pet.OwnerId != currentUserId)
             {
                 return ServiceResult.Failure(
-                    "Unauthorized",
+                    ServiceErrorKeys.Unauthorized,
                     "You are not allowed to approve this adoption request.");
             }
 
             if (request.Status != AdoptionRequestStatus.Pending)
             {
                 return ServiceResult.Failure(
-                    "RequestNotPending",
+                    ServiceErrorKeys.RequestNotPending,
                     "Only pending adoption requests can be approved.");
             }
 
             if (request.Pet.Status != PetStatus.Available)
             {
                 return ServiceResult.Failure(
-                    "PetNotAvailable",
+                    ServiceErrorKeys.PetNotAvailable,
                     "This pet is no longer available for adoption.");
             }
 
