@@ -77,7 +77,7 @@
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <div class="d-flex flex-wrap gap-2 mt-4">
-                    @if (Model.Status == AdoptAPet.Data.Models.Enums.PetStatus.Available
+                    @if (Model.Status == PetStatus.Available
                         && !Model.IsOwner)
                     {
                         <a asp-controller="AdoptionRequests"
@@ -90,6 +90,14 @@
 
                     @if (Model.IsOwner)
                     {
+
+                        <a asp-controller="AdoptionRequests"
+                           asp-action="ForMyPets"
+                           asp-route-petId="@Model.Id"
+                           class="btn btn-outline-primary">
+                            View Adoption Requests
+                        </a>
+
                         <a asp-action="Edit"
                            asp-route-id="@Model.Id"
                            class="btn btn-outline-secondary">

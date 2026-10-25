@@ -1,0 +1,62 @@
+﻿@model CreateAdoptionRequestViewModel
+
+@{
+    ViewData["Title"] = "Request Adoption";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-2">Request Adoption</h1>
+
+                    <p class="text-muted mb-4">
+                        Send an adoption request for
+                        <strong>@ViewData["PetName"]</strong>.
+                    </p>
+
+                    <form asp-action="Create" method="post">
+                        <input asp-for="PetId" type="hidden" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Message"
+                                   class="form-label">
+                                Why would you like to adopt this pet?
+                            </label>
+
+                            <textarea asp-for="Message"
+                                      class="form-control"
+                                      rows="6"
+                                      placeholder="Tell the owner about yourself and the home you can offer..."></textarea>
+
+                            <span asp-validation-for="Message"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Submit Request
+                            </button>
+
+                            <a asp-controller="Pets"
+                               asp-action="Details"
+                               asp-route-id="@Model.PetId"
+                               class="btn btn-outline-secondary">
+                                Back to Pet
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

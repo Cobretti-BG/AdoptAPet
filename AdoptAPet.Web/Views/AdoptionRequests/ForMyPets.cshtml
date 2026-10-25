@@ -1,0 +1,143 @@
+﻿@model IEnumerable<AdoptionRequestViewModel>
+
+@{
+    ViewData["Title"] = "Adoption Requests for My Pet";
+    int petId = (int)(ViewData["PetId"] ?? 0);
+}
+
+<div class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="h2 mb-1">Adoption Requests</h1>
+            <p class="text-muted mb-0">
+                Review applications from people wanting to give your pet a loving home.
+            </p>
+        </div>
+
+        <a asp-controller="Pets"
+           asp-action="Details"
+           asp-route-id="@petId"
+           class="btn btn-outline-secondary">
+            Back to Pet
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+            @successMessage
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+            @errorMessage
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <h2 class="h5">No requests yet</h2>
+                <p class="text-muted mb-0">
+                    There are currently no adoption requests for this pet.
+                </p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var request in Model)
+            {
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                                <div>
+                                    <h2 class="h5 mb-1">
+                                        @(request.ApplicantUserName ?? "Unknown applicant")
+                                    </h2>
+
+                                    <p class="text-muted small mb-2">
+                                        Submitted on
+                                        @request.CreatedOn.ToString("dd.MM.yyyy")
+                                    </p>
+                                </div>
+
+                                <span class="badge rounded-pill
+                                    @(request.Status == AdoptionRequestStatus.Pending
+                                        ? "text-bg-warning"
+                                        : request.Status == AdoptionRequestStatus.Approved
+                                            ? "text-bg-success"
+                                            : request.Status == AdoptionRequestStatus.Rejected
+                                                ? "text-bg-danger"
+                                                : "text-bg-secondary")">
+                                    @request.Status
+                                </span>
+                            </div>
+
+                            <hr />
+
+                            <h3 class="h6">Applicant's message</h3>
+                            <p class="text-break mb-3">@request.Message</p>
+
+                            @if (request.Status == AdoptionRequestStatus.Pending)
+                            {
+                                <div class="d-flex flex-wrap gap-2">
+                                    <form asp-controller="AdoptionRequests"
+                                          asp-action="Approve"
+                                          method="post"
+                                          onsubmit="return confirm('Approve this adoption request? The pet will be marked as adopted.');">
+                                        <input type="hidden"
+                                               name="requestId"
+                                               value="@request.Id" />
+
+                                        <input type="hidden"
+                                               name="petId"
+                                               value="@petId" />
+
+                                        <button type="submit"
+                                                class="btn btn-success">
+                                            Approve Request
+                                        </button>
+                                    </form>
+
+                                    <form asp-controller="AdoptionRequests"
+                                          asp-action="Reject"
+                                          method="post"
+                                          onsubmit="return confirm('Are you sure you want to reject this adoption request?');">
+                                        <input type="hidden"
+                                               name="requestId"
+                                               value="@request.Id" />
+
+                                        <input type="hidden"
+                                               name="petId"
+                                               value="@petId" />
+
+                                        <button type="submit"
+                                                class="btn btn-outline-danger">
+                                            Reject Request
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
