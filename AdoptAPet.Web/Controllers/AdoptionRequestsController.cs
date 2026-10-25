@@ -226,6 +226,10 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cancel(int requestId)
         {
+            if (requestId <= 0)
+            {
+                return NotFound();
+            }
             string? currentUserId = GetCurrentUserId();
 
             if (string.IsNullOrWhiteSpace(currentUserId))
@@ -264,6 +268,10 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int requestId, int petId)
         {
+            if (requestId <= 0 || petId <= 0)
+            {
+                return NotFound();
+            }
             string? currentUserId = GetCurrentUserId();
 
             if (string.IsNullOrWhiteSpace(currentUserId))
@@ -303,6 +311,10 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int requestId, int petId)
         {
+            if (requestId <= 0 || petId <= 0)
+            {
+                return NotFound();
+            }
             string? currentUserId = GetCurrentUserId();
 
             if (string.IsNullOrWhiteSpace(currentUserId))
