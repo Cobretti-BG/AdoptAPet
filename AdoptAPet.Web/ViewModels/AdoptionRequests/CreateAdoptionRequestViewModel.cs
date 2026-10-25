@@ -9,8 +9,9 @@
         public int PetId { get; set; }
 
         [Required]
-        [StringLength(MessageMaxLength, MinimumLength = MessageMinLength)]
-        [Display(Name = "Say hi, and few things about yourself and your interest in this friend? :)")]
+        [StringLength(MessageMaxLength, MinimumLength = MessageMinLength, 
+            ErrorMessage = "The {0} must be between {2} and {1} characters long.")]
+        [Display(Name = "adoption request message")]
         public string Message { get; set; } = string.Empty;
     }
 }

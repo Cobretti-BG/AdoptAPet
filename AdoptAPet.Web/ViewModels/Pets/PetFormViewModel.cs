@@ -42,6 +42,9 @@
 
         [Url]
         [StringLength(ImageUrlMaxLength)]
+        [RegularExpression(
+            @"^https?://.+",
+            ErrorMessage = "Image URL must start with http:// or https://.")]
         [Display(Name = "Image URL")]
         public string? ImageUrl { get; set; }
     }

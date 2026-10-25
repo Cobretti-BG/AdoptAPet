@@ -62,14 +62,14 @@
                 return $"Species maximum length is {SpeciesMaxLength} letters.";
             }
 
-            if (name != null && name.Trim().Length < NameMinLength)
+            if (!string.IsNullOrWhiteSpace(name) && name.Trim().Length < NameMinLength)
             {
-                return $"Name must be minimum {NameMinLength} letters long.";
+                return $"Name must be at least {NameMinLength} characters long.";
             }
 
-            if (name != null && name.Trim().Length > NameMaxLength)
+            if (!string.IsNullOrWhiteSpace(name) && name.Trim().Length > NameMaxLength)
             {
-                return $"Name maximum length is {NameMaxLength} letters.";
+                return $"Name cannot exceed {NameMaxLength} characters.";
             }
 
             if (breed?.Trim().Length > BreedMaxLength)

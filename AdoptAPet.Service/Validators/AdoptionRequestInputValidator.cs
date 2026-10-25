@@ -22,12 +22,12 @@
 
             if (messageLength < MessageMinLength)
             {
-                return $"The adoption message has to be minimum {MessageMinLength} letters.";
+                return $"The adoption message has to be minimum {MessageMinLength} characters.";
             }
 
             if (messageLength > MessageMaxLength)
             {
-                return $"The adoption message can be minimum {MessageMaxLength} letters.";
+                return $"The adoption message cannot exceed {MessageMaxLength} characters.";
             }
 
             return null;
