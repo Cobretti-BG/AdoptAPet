@@ -10,12 +10,7 @@
     </a>
 
     <div class="row g-4">
-        @if (TempData["ErrorMessage"] is string errorMessage)
-        {
-            <div class="alert alert-danger" role="alert">
-                @errorMessage
-            </div>
-        }
+        <partial name="_Notification" />
         <div class="col-md-5">
             @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
             {

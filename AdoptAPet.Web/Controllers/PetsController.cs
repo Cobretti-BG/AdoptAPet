@@ -46,6 +46,39 @@
             return View(pets);
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> MyPets()
+        {
+            string currentUserId = GetCurrentUserId();
+
+            if (string.IsNullOrWhiteSpace(currentUserId))
+            {
+                return Challenge();
+            }
+
+            ServiceResult<IReadOnlyCollection<PetDto>> result = await petService.GetByOwnerAsync(currentUserId);
+
+            if (!result.IsSuccess || result.Data == null)
+            {
+                return View("Error");
+            }
+
+            IEnumerable<PetListingViewModel> viewModels = result.Data.Select(pet => new PetListingViewModel
+            {
+                Id = pet.Id,
+                Name = pet.Name,
+                Species = pet.Species,
+                Breed = pet.Breed,
+                Gender = pet.Gender,
+                DateOfBirth = pet.DateOfBirth,
+                Location = pet.Location,
+                ImageUrl = pet.ImageUrl
+            }).ToList();
+
+            return View(viewModels);
+        }
+
         public async Task<IActionResult> Details(int id)
         {
             if (id <= 0)
