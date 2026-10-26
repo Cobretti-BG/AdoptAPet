@@ -6,9 +6,10 @@
 }
 
 <div class="container py-4">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="d-flex flex-column flex-sm-row justify-content-between
+        align-items-sm-center gap-3 mb-4">
         <div>
-            <h1 class="h2 mb-1">Adoption Requests</h1>
+            <h1 class="mb-2">Adoption Requests</h1>
             <p class="text-muted mb-0">
                 Review applications from people wanting to give your pet a loving home.
             </p>
@@ -18,7 +19,7 @@
            asp-action="Details"
            asp-route-id="@petId"
            class="btn btn-outline-secondary">
-            Back to Pet
+            Back to pet
         </a>
     </div>
 
@@ -26,51 +27,68 @@
 
     @if (!Model.Any())
     {
-        <div class="card">
-            <div class="card-body text-center py-5">
-                <h2 class="h5">No requests yet</h2>
-                <p class="text-muted mb-0">
-                    There are currently no adoption requests for this pet.
-                </p>
-            </div>
+        <div class="empty-state text-center p-4 p-md-5">
+            <div class="empty-state-icon mb-3" aria-hidden="true">🐾</div>
+
+            <h2 class="h4">No requests yet</h2>
+
+            <p class="text-muted mb-0">
+                There are currently no adoption requests for this pet.
+                When someone applies, their message will appear here.
+            </p>
         </div>
     }
     else
     {
         <div class="row g-3">
-            @foreach (var request in Model)
+            @foreach (AdoptionRequestViewModel request in Model)
             {
                 <div class="col-12">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                    <article class="card adoption-request-card">
+                        <div class="card-body p-3 p-md-4">
+                            <div class="d-flex flex-column flex-sm-row
+                                justify-content-between align-items-sm-start gap-3">
                                 <div>
                                     <h2 class="h5 mb-1">
                                         @(request.ApplicantUserName ?? "Unknown applicant")
                                     </h2>
 
-                                    <p class="text-muted small mb-2">
+                                    <p class="text-muted small mb-0">
                                         Submitted on
                                         @request.CreatedOn.ToString("dd.MM.yyyy")
                                     </p>
                                 </div>
 
-                                <span class="badge rounded-pill
-                                    @(request.Status == AdoptionRequestStatus.Pending
-                                        ? "text-bg-warning"
-                                        : request.Status == AdoptionRequestStatus.Approved
-                                            ? "text-bg-success"
-                                            : request.Status == AdoptionRequestStatus.Rejected
-                                                ? "text-bg-danger"
-                                                : "text-bg-secondary")">
-                                    @request.Status
-                                </span>
+                                @if (request.Status == AdoptionRequestStatus.Pending)
+                                {
+                                    <span class="badge rounded-pill text-bg-warning">
+                                        Pending
+                                    </span>
+                                }
+                                else if (request.Status == AdoptionRequestStatus.Approved)
+                                {
+                                    <span class="badge rounded-pill text-bg-success">
+                                        Approved
+                                    </span>
+                                }
+                                else if (request.Status == AdoptionRequestStatus.Rejected)
+                                {
+                                    <span class="badge rounded-pill text-bg-danger">
+                                        Rejected
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill text-bg-secondary">
+                                        @request.Status
+                                    </span>
+                                }
                             </div>
 
-                            <hr />
+                            <hr class="my-3" />
 
-                            <h3 class="h6">Applicant's message</h3>
-                            <p class="text-break mb-3">@request.Message</p>
+                            <h3 class="h6 mb-2">Applicant's message</h3>
+                            <p class="request-message mb-4">@request.Message</p>
 
                             @if (request.Status == AdoptionRequestStatus.Pending)
                             {
@@ -87,9 +105,8 @@
                                                name="petId"
                                                value="@petId" />
 
-                                        <button type="submit"
-                                                class="btn btn-success">
-                                            Approve Request
+                                        <button type="submit" class="btn btn-success">
+                                            Approve request
                                         </button>
                                     </form>
 
@@ -105,15 +122,14 @@
                                                name="petId"
                                                value="@petId" />
 
-                                        <button type="submit"
-                                                class="btn btn-outline-danger">
-                                            Reject Request
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            Reject request
                                         </button>
                                     </form>
                                 </div>
                             }
                         </div>
-                    </div>
+                    </article>
                 </div>
             }
         </div>

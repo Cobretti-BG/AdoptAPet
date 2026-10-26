@@ -2,41 +2,43 @@
 
 @{
     ViewData["Title"] = "Pet details";
+
+    string displayName = string.IsNullOrWhiteSpace(Model.Name)
+        ? Model.Species
+        : Model.Name;
 }
 
 <div class="container py-4">
+    <partial name="_Notification" />
+
     <a asp-action="Index" class="btn btn-link px-0 mb-3">
         &larr; Back to available pets
     </a>
 
-    <div class="row g-4">
-        <partial name="_Notification" />
+    <div class="row g-4 g-lg-5">
         <div class="col-md-5">
             @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
             {
                 <img src="@Model.ImageUrl"
-                     class="img-fluid rounded shadow-sm w-100"
-                     alt="Photo of @(Model.Name ?? Model.Species)"
-                     style="max-height: 500px; object-fit: cover;" />
+                     class="img-fluid rounded-3 shadow-sm w-100 pet-details-image"
+                     alt="Photo of @displayName" />
             }
             else
             {
-                <div class="bg-light rounded d-flex align-items-center
-                    justify-content-center"
-                     style="min-height: 300px;">
-                    <span class="text-muted">No photo available</span>
+                <div class="pet-details-placeholder rounded-3 d-flex
+                    flex-column align-items-center justify-content-center"
+                     role="img"
+                     aria-label="No photo available">
+                    <span aria-hidden="true">🐾</span>
+                    <span>No photo available</span>
                 </div>
             }
         </div>
 
         <div class="col-md-7">
-            <h1>
-                @(string.IsNullOrWhiteSpace(Model.Name)
-                    ? Model.Species
-                    : Model.Name)
-            </h1>
+            <h1 class="mb-2">@displayName</h1>
 
-            <p class="text-muted fs-5">
+            <p class="text-muted fs-5 mb-4">
                 @Model.Species
                 @if (!string.IsNullOrWhiteSpace(Model.Breed))
                 {
@@ -44,31 +46,53 @@
                 }
             </p>
 
-            <dl class="row">
-                <dt class="col-sm-4">Gender</dt>
-                <dd class="col-sm-8">@Model.Gender</dd>
+            <div class="mb-4">
+                <span class="text-muted me-2">Adoption status:</span>
 
-                <dt class="col-sm-4">Date of birth</dt>
-                <dd class="col-sm-8">
-                    @(Model.DateOfBirth?.ToString("dd.MM.yyyy") ?? "Unknown")
-                </dd>
+                @if (Model.Status == PetStatus.Available)
+                {
+                    <span class="badge text-bg-success">Available</span>
+                }
+                else if (Model.Status == PetStatus.PendingAdoption)
+                {
+                    <span class="badge text-bg-warning">Pending adoption</span>
+                }
+                else if (Model.Status == PetStatus.Adopted)
+                {
+                    <span class="badge text-bg-secondary">Adopted</span>
+                }
+                else
+                {
+                    <span class="badge text-bg-secondary">@Model.Status</span>
+                }
+            </div>
 
-                <dt class="col-sm-4">Color</dt>
-                <dd class="col-sm-8">
-                    @(Model.Color ?? "Unknown")
-                </dd>
+            <div class="pet-details-information p-3 p-md-4 rounded-3">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Gender</dt>
+                    <dd class="col-sm-8">@Model.Gender</dd>
 
-                <dt class="col-sm-4">Location</dt>
-                <dd class="col-sm-8">@Model.Location</dd>
+                    <dt class="col-sm-4">Date of birth</dt>
+                    <dd class="col-sm-8">
+                        @(Model.DateOfBirth?.ToString("dd.MM.yyyy") ?? "Unknown")
+                    </dd>
 
-                <dt class="col-sm-4">Status</dt>
-                <dd class="col-sm-8">@Model.Status</dd>
-            </dl>
+                    <dt class="col-sm-4">Color</dt>
+                    <dd class="col-sm-8">
+                        @(string.IsNullOrWhiteSpace(Model.Color)
+                            ? "Unknown"
+                            : Model.Color)
+                    </dd>
 
-            <h2 class="h4 mt-4">About this pet</h2>
-            <p style="white-space: pre-line;">@Model.Description</p>
+                    <dt class="col-sm-4">Location</dt>
+                    <dd class="col-sm-8">@Model.Location</dd>
+                </dl>
+            </div>
 
-            
+            <h2 class="h4 mt-4 mb-3">About this pet</h2>
+
+            <p class="pet-details-description">@Model.Description</p>
+
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <div class="d-flex flex-wrap gap-2 mt-4">
@@ -85,12 +109,11 @@
 
                     @if (Model.IsOwner)
                     {
-
                         <a asp-controller="AdoptionRequests"
                            asp-action="ForMyPets"
                            asp-route-petId="@Model.Id"
-                           class="btn btn-outline-primary">
-                            View Adoption Requests
+                           class="btn btn-outline-success">
+                            View adoption requests
                         </a>
 
                         <a asp-action="Edit"
@@ -107,7 +130,6 @@
                     }
                 </div>
             }
-
         </div>
     </div>
 </div>

@@ -9,15 +9,16 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AdoptAPet.Web.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="app-body">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
             <div class="container">
-                <a class="navbar-brand fw-bold"
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold"
                    asp-area=""
                    asp-controller="Home"
                    asp-action="Index">
-                    Adopt A Pet
+                    <span class="brand-icon" aria-hidden="true">🐾</span>
+                    <span>Adopt-A-Pet</span>
                 </a>
 
                 <button class="navbar-toggler"
@@ -31,7 +32,7 @@
                 </button>
 
                 <div class="navbar-collapse collapse" id="mainNavbar">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item">
                             <a class="nav-link"
                                asp-controller="Home"
@@ -48,7 +49,6 @@
                             </a>
                         </li>
 
-  
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
@@ -67,24 +67,25 @@
                                 </a>
                             </li>
                         }
-
                     </ul>
 
-                    <partial name="_LoginPartial" />
+                    <div class="navbar-auth">
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="app-content">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted mt-4">
+    <footer class="border-top footer text-muted">
         <div class="container py-3">
-            &copy; 2026 - Adopt A Pet -
+            &copy; @DateTime.Now.Year - Adopt-A-Pet -
             <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>

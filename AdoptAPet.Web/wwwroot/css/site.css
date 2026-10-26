@@ -29,3 +29,295 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+
+
+/* --------------custom css-------------- */
+
+.home-tagline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 1.25rem;
+    border: 1px solid #cfe3d3;
+    border-radius: 50rem;
+    background-color: #f0f7f1;
+    color: #27633a;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.home-tagline-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+
+
+/* navbar  */
+.navbar {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+}
+
+.navbar-brand {
+    color: #27633a;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+}
+
+    .navbar-brand:hover,
+    .navbar-brand:focus {
+        color: #1d4d2c;
+    }
+
+.brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    line-height: 1;
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+    transition: color 0.15s ease-in-out;
+}
+
+    .navbar .nav-link:hover,
+    .navbar .nav-link:focus {
+        color: #27633a;
+    }
+
+.navbar-auth {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-auth {
+        padding-top: 0.5rem;
+        padding-bottom: 0.25rem;
+    }
+}
+
+
+/* Pet listing cards */
+.pet-card {
+    overflow: hidden;
+    border: 1px solid #e4eae5;
+    border-radius: 0.85rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+    .pet-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 10%) !important;
+    }
+
+.pet-card-image,
+.pet-card-placeholder {
+    width: 100%;
+    height: 220px;
+}
+
+.pet-card-image {
+    display: block;
+    object-fit: cover;
+}
+
+.pet-card-placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: #f0f7f1;
+    color: #55735d;
+}
+
+    .pet-card-placeholder span:first-child {
+        font-size: 2rem;
+        line-height: 1;
+    }
+
+/* Empty listing state */
+.empty-state {
+    border: 1px dashed #c9d9cc;
+    border-radius: 1rem;
+    background-color: #f8fbf8;
+}
+
+.empty-state-icon {
+    font-size: 2.5rem;
+    line-height: 1.2;
+}
+
+
+
+/* Pet details page */
+.pet-details-image,
+.pet-details-placeholder {
+    width: 100%;
+    min-height: 300px;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.pet-details-placeholder {
+    display: flex;
+    gap: 0.75rem;
+    background-color: #f0f7f1;
+    color: #55735d;
+}
+
+    .pet-details-placeholder span:first-child {
+        font-size: 3rem;
+        line-height: 1;
+    }
+
+.pet-details-information {
+    background-color: #f8fbf8;
+    border: 1px solid #e4eae5;
+}
+
+    .pet-details-information dt {
+        color: #526456;
+    }
+
+.pet-details-description {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+
+
+/* Pet creation and editing forms */
+.pet-form-container {
+    max-width: 850px;
+}
+
+.pet-form-card {
+    background-color: #fff;
+    border: 1px solid #e4eae5;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 4%);
+}
+
+    .pet-form-card .form-label {
+        font-weight: 600;
+    }
+
+    .pet-form-card .form-control,
+    .pet-form-card .form-select {
+        border-color: #d5ded7;
+    }
+
+        .pet-form-card .form-control:focus,
+        .pet-form-card .form-select:focus {
+            border-color: #75a984;
+            box-shadow: 0 0 0 0.2rem rgb(39 99 58 / 12%);
+        }
+
+    .pet-form-card .form-text {
+        color: #6c757d;
+    }
+
+    .pet-form-card .text-danger {
+        display: block;
+        margin-top: 0.25rem;
+    }
+
+/* Pet deletion confirmation */
+.pet-delete-container {
+    max-width: 700px;
+}
+
+
+/* Adoption request tables */
+.adoption-requests-table {
+    border: 1px solid #e4eae5;
+    border-radius: 0.75rem;
+}
+
+    .adoption-requests-table table {
+        min-width: 700px;
+    }
+
+    .adoption-requests-table thead th {
+        padding: 1rem;
+        background-color: #f0f7f1;
+        color: #365440;
+        font-weight: 600;
+        border-bottom-color: #dce7de;
+    }
+
+    .adoption-requests-table tbody td {
+        padding: 1rem;
+    }
+
+    .adoption-requests-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+.request-message {
+    min-width: 180px;
+    max-width: 320px;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+}
+
+.pet-request-link {
+    color: #27633a;
+}
+
+    .pet-request-link:hover {
+        color: #1d4d2c;
+        text-decoration: underline !important;
+    }
+
+
+
+/* Adoption requests received by pet owners */
+.adoption-request-card {
+    border: 1px solid #e4eae5;
+    border-radius: 0.85rem;
+    transition: box-shadow 0.18s ease;
+}
+
+    .adoption-request-card:hover {
+        box-shadow: 0 0.35rem 1rem rgb(0 0 0 / 6%);
+    }
+
+    .adoption-request-card .card-body {
+        min-width: 0;
+    }
+
+    .adoption-request-card hr {
+        border-color: #e4eae5;
+        opacity: 1;
+    }
+
+    .adoption-request-card .request-message {
+        overflow-wrap: anywhere;
+        white-space: pre-line;
+    }
+
+
+/* Shared application layout */
+.app-body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-content {
+    flex: 1 0 auto;
+}
+
+    .app-content main {
+        min-width: 0;
+    }
+
+.footer {
+    flex-shrink: 0;
+}

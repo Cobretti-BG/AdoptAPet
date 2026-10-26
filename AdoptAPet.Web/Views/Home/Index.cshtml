@@ -1,8 +1,72 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Find Your New Best Friend";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="container py-5">
+    <div class="text-center mb-5">
+        <div class="home-tagline mb-4">
+            <span class="home-tagline-icon" aria-hidden="true">♥</span>
+            <span>Every pet deserves a loving home</span>
+        </div>
+
+        <h1 class="display-4 fw-bold mb-3">
+            A little love can change a life.
+        </h1>
+
+        <p class="lead text-secondary mx-auto" style="max-width: 700px;">
+            Meet your new best friend or help a pet find the caring family
+            they deserve. Your next happy story could start right here.
+        </p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-12 col-lg-5">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5 d-flex flex-column">
+                    <div class="display-3 mb-3" aria-hidden="true">🐾</div>
+
+                    <h2 class="h3 fw-bold">Find a loving friend</h2>
+
+                    <p class="text-secondary mb-4">
+                        Explore pets looking for a home. Discover their
+                        stories and find a companion who fits your life.
+                    </p>
+
+                    <a asp-controller="Pets"
+                       asp-action="Index"
+                       class="btn btn-outline-success btn-lg mt-auto">
+                        Browse available pets
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5 d-flex flex-column">
+                    <div class="display-3 mb-3" aria-hidden="true">🏡</div>
+
+                    <h2 class="h3 fw-bold">Find a loving home</h2>
+
+                    <p class="text-secondary mb-4">
+                        Have a pet who needs a new beginning?
+                        Create a listing and connect with people
+                        who want to offer a loving home.
+                    </p>
+
+                    <a asp-controller="Pets"
+                       asp-action="Create"
+                       class="btn btn-outline-success btn-lg mt-auto">
+                        Create a pet listing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="text-secondary mb-0">
+            Every adoption is the beginning of a beautiful friendship.
+        </p>
+    </div>
+</section>
