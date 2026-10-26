@@ -28,7 +28,9 @@
             this IServiceCollection services)
         {
             services.AddDefaultIdentity<ApplicationUser>(options =>
-                    options.SignIn.RequireConfirmedAccount = true)
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             return services;

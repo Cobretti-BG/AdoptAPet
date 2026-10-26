@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using AdoptAPet.Data;
 namespace AdoptAPet.Web
 {
     using Extensions;
@@ -6,6 +9,9 @@ namespace AdoptAPet.Web
         public static void Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+
+
 
             // Add services to the container.
             builder.Services.AddApplicationDbContext(builder.Configuration);
