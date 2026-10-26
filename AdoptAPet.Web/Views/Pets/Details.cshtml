@@ -93,11 +93,10 @@
 
             <p class="pet-details-description">@Model.Description</p>
 
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                <div class="d-flex flex-wrap gap-2 mt-4">
-                    @if (Model.Status == PetStatus.Available
-                        && !Model.IsOwner)
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                @if (Model.Status == PetStatus.Available && !Model.IsOwner)
+                {
+                    @if (User.Identity?.IsAuthenticated == true)
                     {
                         <a asp-controller="AdoptionRequests"
                            asp-action="Create"
@@ -106,30 +105,42 @@
                             Apply to adopt
                         </a>
                     }
-
-                    @if (Model.IsOwner)
+                    else
                     {
-                        <a asp-controller="AdoptionRequests"
-                           asp-action="ForMyPets"
-                           asp-route-petId="@Model.Id"
-                           class="btn btn-outline-success">
-                            View adoption requests
-                        </a>
-
-                        <a asp-action="Edit"
-                           asp-route-id="@Model.Id"
-                           class="btn btn-outline-secondary">
-                            Edit listing
-                        </a>
-
-                        <a asp-action="Delete"
-                           asp-route-id="@Model.Id"
-                           class="btn btn-outline-danger">
-                            Delete listing
+                        <a asp-area="Identity"
+                           asp-page="/Account/Login"
+                           asp-route-returnUrl="@Url.Action(
+                                              "Create",
+                                              "AdoptionRequests",
+                                              new { petId = Model.Id })"
+                           class="btn btn-success">
+                            Apply to adopt
                         </a>
                     }
-                </div>
-            }
+                }
+
+                @if (Model.IsOwner)
+                {
+                    <a asp-controller="AdoptionRequests"
+                       asp-action="ForMyPets"
+                       asp-route-petId="@Model.Id"
+                       class="btn btn-outline-success">
+                        View adoption requests
+                    </a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-secondary">
+                        Edit listing
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-danger">
+                        Delete listing
+                    </a>
+                }
+            </div>
         </div>
     </div>
 </div>

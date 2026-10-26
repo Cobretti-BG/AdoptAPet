@@ -61,7 +61,8 @@
 
             if (result.Data.OwnerId == currentUserId)
             {
-                return Forbid();
+                TempData["ErrorMessage"] = "You can't apply for adoption of your own pets.";
+                return RedirectToAction("MyPets", "Pets");
             }
 
             CreateAdoptionRequestViewModel model = new CreateAdoptionRequestViewModel
