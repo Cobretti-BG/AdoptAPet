@@ -15,19 +15,19 @@
 
             if (string.IsNullOrWhiteSpace(dto.Message))
             {
-                return "A message is required.";
+                return "An adoption request message is required.";
             }
 
             int messageLength = dto.Message.Trim().Length;
 
             if (messageLength < MessageMinLength)
             {
-                return $"The adoption message has to be minimum {MessageMinLength} characters.";
+                return $"The adoption request message must be at least {MessageMinLength} characters long.";
             }
 
             if (messageLength > MessageMaxLength)
             {
-                return $"The adoption message cannot exceed {MessageMaxLength} characters.";
+                return $"The adoption request message cannot exceed {MessageMaxLength} characters.";
             }
 
             return null;

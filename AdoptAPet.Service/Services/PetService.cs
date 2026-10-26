@@ -27,6 +27,12 @@
 
         public async Task<ServiceResult<PetDto>> GetByIdAsync(int id)
         {
+            if (id <= 0)
+            {
+                return ServiceResult<PetDto>.Failure(
+                    ServiceErrorKeys.PetNotFound,
+                    "Pet was not found.");
+            }
             Pet? pet = await context.Pets
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -57,6 +63,14 @@
 
         public async Task<ServiceResult<IReadOnlyCollection<PetDto>>> GetByOwnerAsync(string ownerId)
         {
+
+            if (string.IsNullOrWhiteSpace(ownerId))
+            {
+                return ServiceResult<IReadOnlyCollection<PetDto>>.Failure(
+                    ServiceErrorKeys.UserNotAuthenticated,
+                    "A valid owner is required.");
+            }
+
             List<Pet> pets = await context.Pets
                 .AsNoTracking()
                 .Where(p => p.OwnerId == ownerId)
@@ -129,6 +143,18 @@
 
         public async Task<ServiceResult> UpdateAsync(int id, UpdatePetDto dto, string currentUserId)
         {
+            if (id <= 0)
+            {
+                return ServiceResult.Failure(
+                    ServiceErrorKeys.PetNotFound,
+                    "The requested pet could not be found.");
+            }
+            if (dto == null)
+            {
+                return ServiceResult.Failure(
+                    ServiceErrorKeys.ValidationFailed,
+                    "Pet information is required.");
+            }
 
             string? validationErrorCheck = PetInputValidator.Validate(dto);
 
@@ -224,7 +250,7 @@
                     "This pet cannot be deleted while pending adoption requests exist.");
             }
 
-            await using IDbContextTransaction transaction = await context.Database.BeginTransactionAsync();
+            
 
             List<AdoptionRequest> requests = await context.AdoptionRequests
                 .Where(request => request.PetId == id)
@@ -234,7 +260,7 @@
             context.Pets.Remove(pet);
 
             await context.SaveChangesAsync();
-            await transaction.CommitAsync();
+            
 
             return ServiceResult.Success();
         }

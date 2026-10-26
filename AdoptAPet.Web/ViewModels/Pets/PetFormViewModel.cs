@@ -20,7 +20,6 @@
         [StringLength(BreedMaxLength)]
         public string? Breed { get; set; }
 
-        [Required]
         [EnumDataType(typeof(PetGender))]
         [Display(Name = "Gender")]
         public PetGender Gender { get; set; } = PetGender.Unknown;

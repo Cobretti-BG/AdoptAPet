@@ -54,12 +54,12 @@
 
             if (species.Trim().Length < SpeciesMinLength)
             {
-                return $"Species must be minimum {SpeciesMinLength} letters long.";
+                return $"Species must be at least {SpeciesMinLength} characters long.";
             }
 
             if (species.Trim().Length > SpeciesMaxLength)
             {
-                return $"Species maximum length is {SpeciesMaxLength} letters.";
+                return $"Species cannot exceed {SpeciesMaxLength} characters.";
             }
 
             if (!string.IsNullOrWhiteSpace(name) && name.Trim().Length < NameMinLength)
