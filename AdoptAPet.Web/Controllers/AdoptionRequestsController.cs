@@ -10,6 +10,7 @@
     using Service.Contracts;
     using Service.DTOs;
     using Service.Results;
+
     using Common;
 
     using ViewModels.AdoptionRequests;
@@ -170,7 +171,6 @@
             return View(viewModels);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> ForMyPets(int petId)
         {
@@ -303,7 +303,7 @@
             }
 
             TempData["SuccessMessage"] =
-                "The adoption request was approved! The pet is now marked for having lovely home. :)";
+                "The adoption request was approved! This pet is now marked as having lovely home. :)";
 
             return RedirectToAction(nameof(ForMyPets), new { petId });
         }

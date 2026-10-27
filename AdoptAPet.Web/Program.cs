@@ -10,9 +10,6 @@ namespace AdoptAPet.Web
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-
-
-
             // Add services to the container.
             builder.Services.AddApplicationDbContext(builder.Configuration);
             builder.Services.AddApplicationIdentity();

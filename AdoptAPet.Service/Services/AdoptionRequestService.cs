@@ -123,7 +123,7 @@
                         "A valid user is required to retrieve adoption requests.");
             }
 
-            List<AdoptionRequestDto> requests = await context.AdoptionRequests
+            IReadOnlyCollection<AdoptionRequestDto> requests = await context.AdoptionRequests
                 .AsNoTracking()
                 .Where(r => r.ApplicantId == applicantId)
                 .OrderByDescending(r => r.CreatedOn)
@@ -174,7 +174,7 @@
                         "The requested pet could not be found.");
             }
 
-            List<AdoptionRequestDto> requests = await context.AdoptionRequests
+            IReadOnlyCollection<AdoptionRequestDto> requests = await context.AdoptionRequests
                 .AsNoTracking()
                 .Where(r => r.PetId == petId && r.Pet.OwnerId == ownerId)
                 .OrderByDescending(r => r.CreatedOn)

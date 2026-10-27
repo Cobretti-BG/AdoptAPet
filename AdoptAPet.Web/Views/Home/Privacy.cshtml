@@ -1,6 +1,92 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-4 py-md-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-9">
+            <div class="mb-4">
+                <h1 class="display-6 fw-semibold">Privacy Policy</h1>
+                <p class="text-muted mb-0">
+                    How Adopt-A-Pet handles your information.
+                </p>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <p>
+                        Adopt-A-Pet helps people publish pets available
+                        for adoption and connect with potential adopters.
+                        This page explains what information the application
+                        stores and how it is used.
+                    </p>
+
+                    <h2 class="h4 mt-4">1. Information We Collect</h2>
+                    <p>When you use the application, we may store:</p>
+                    <ul>
+                        <li>
+                            <strong>Account information:</strong>
+                            your email address and authentication-related
+                            information required to manage your account.
+                        </li>
+                        <li>
+                            <strong>Pet listings:</strong>
+                            information you submit about a pet, such as
+                            its name, species, breed, age, description,
+                            location and optional image URL.
+                        </li>
+                        <li>
+                            <strong>Adoption requests:</strong>
+                            the message you submit, the request status
+                            and information linking the request to your
+                            account and the relevant pet.
+                        </li>
+                    </ul>
+
+                    <h2 class="h4 mt-4">2. How Information Is Used</h2>
+                    <p>
+                        Information is used to operate the application,
+                        display available pets, manage listings, process
+                        adoption requests and enforce access permissions.
+                    </p>
+
+                    <h2 class="h4 mt-4">3. Information Visibility</h2>
+                    <p>
+                        Pet listing information is displayed to visitors
+                        so they can discover pets available for adoption.
+                        Adoption request messages and management details
+                        are intended for the applicant and the owner of
+                        the relevant pet, subject to the application's
+                        access controls.
+                    </p>
+                    <p>
+                        Avoid including passwords, financial details or
+                        other sensitive personal information in pet
+                        descriptions or adoption messages.
+                    </p>
+
+                    <h2 class="h4 mt-4">4. Data Storage and Retention</h2>
+                    <p>
+                        Application data is stored on our side.
+                        Account and listing information may remain stored
+                        while the relevant records exist. Deleting a pet
+                        listing may also delete its associated adoption
+                        request records.
+                    </p>
+
+                   
+
+    
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="btn btn-outline-success">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

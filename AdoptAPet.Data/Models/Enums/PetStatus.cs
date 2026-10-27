@@ -3,7 +3,6 @@
     public enum PetStatus
     {
         Available = 0,
-        PendingAdoption = 1,
-        Adopted = 2
+        Adopted = 1
     }
 }

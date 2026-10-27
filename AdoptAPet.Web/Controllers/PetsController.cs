@@ -169,7 +169,6 @@
             return RedirectToAction(nameof(Details), new { id = result.Data });
         }
 
-
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)

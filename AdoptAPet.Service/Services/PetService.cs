@@ -31,7 +31,7 @@
             {
                 return ServiceResult<PetDto>.Failure(
                     ServiceErrorKeys.PetNotFound,
-                    "Pet was not found.");
+                    "Invalid pet selection.");
             }
             Pet? pet = await context.Pets
                 .AsNoTracking()
@@ -49,7 +49,7 @@
 
         public async Task<ServiceResult<IReadOnlyCollection<PetDto>>> GetAvailableAsync()
         {
-            List<Pet> pets = await context.Pets
+            IReadOnlyCollection<Pet> pets = await context.Pets
                 .AsNoTracking()
                 .Where(p => p.Status == PetStatus.Available)
                 .OrderByDescending(p => p.CreatedOn)
@@ -71,13 +71,13 @@
                     "A valid owner is required.");
             }
 
-            List<Pet> pets = await context.Pets
+            IEnumerable<Pet> pets = await context.Pets
                 .AsNoTracking()
                 .Where(p => p.OwnerId == ownerId)
                 .OrderByDescending(p => p.CreatedOn)
                 .ToListAsync();
 
-            List<PetDto> petDtos = pets.Select(MapToDto).ToList();
+            IReadOnlyCollection<PetDto> petDtos = pets.Select(MapToDto).ToList();
 
             return ServiceResult<IReadOnlyCollection<PetDto>>
                 .Success(petDtos);
@@ -147,7 +147,7 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.PetNotFound,
-                    "The requested pet could not be found.");
+                    "Invalid pet selection.");
             }
             if (dto == null)
             {
@@ -211,7 +211,6 @@
             return ServiceResult.Success();
         }
 
-
         public async Task<ServiceResult> DeleteAsync(int id, string currentUserId)
         {
             if (string.IsNullOrWhiteSpace(currentUserId))
@@ -249,8 +248,7 @@
                     ServiceErrorKeys.PetHasAdoptionRequests,
                     "This pet cannot be deleted while pending adoption requests exist.");
             }
-
-            
+                        
 
             List<AdoptionRequest> requests = await context.AdoptionRequests
                 .Where(request => request.PetId == id)
@@ -264,7 +262,6 @@
 
             return ServiceResult.Success();
         }
-
 
 
 
