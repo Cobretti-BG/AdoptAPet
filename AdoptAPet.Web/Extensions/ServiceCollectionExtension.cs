@@ -14,7 +14,7 @@
             IConfiguration configuration)
         {
             string connectionString =
-                configuration.GetConnectionString("DefaultConnection")
+                configuration.GetConnectionString("SqlServerConnection")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found.");
 
