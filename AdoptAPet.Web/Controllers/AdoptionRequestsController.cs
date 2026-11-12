@@ -82,16 +82,24 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateAdoptionRequestViewModel model)
         {
+            if (model.PetId <= 0)
+            {
+                return NotFound();
+            }
+
             if (!ModelState.IsValid)
             {
-                ServiceResult<PetDto> petResult = await petService.GetByIdAsync(model.PetId);
+                ServiceResult<PetDto> petResult =
+                    await petService.GetByIdAsync(model.PetId);
 
-                if (petResult.IsSuccess && petResult.Data != null)
+                if (!petResult.IsSuccess || petResult.Data == null)
                 {
-                    ViewData["PetName"] = string.IsNullOrWhiteSpace(petResult.Data.Name)
-                            ? petResult.Data.Species
-                            : petResult.Data.Name;
+                    return NotFound();
                 }
+
+                ViewData["PetName"] = string.IsNullOrWhiteSpace(petResult.Data.Name)
+                    ? petResult.Data.Species
+                    : petResult.Data.Name;
 
                 return View(model);
             }
@@ -115,18 +123,43 @@
 
             if (!result.IsSuccess)
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    result.ErrorMessage ?? "The adoption request could not be submitted.");
-
-                ServiceResult<PetDto> petResult = await petService.GetByIdAsync(model.PetId);
-
-                if (petResult.IsSuccess && petResult.Data != null)
+                switch (result.ErrorKey)
                 {
-                    ViewData["PetName"] = string.IsNullOrWhiteSpace(petResult.Data.Name)
-                            ? petResult.Data.Species
-                            : petResult.Data.Name;
+                    case ServiceErrorKeys.PetNotFound:
+                        return NotFound();
+
+                    case ServiceErrorKeys.PetNotAvailable:
+                        TempData["ErrorMessage"] = result.ErrorMessage
+                            ?? ServiceErrorMessages.PetNotAvailable;
+                        return RedirectToAction("Details", "Pets", new { id = model.PetId });
+
+                    case ServiceErrorKeys.CannotAdoptOwnPet:
+                        TempData["ErrorMessage"] = result.ErrorMessage
+                            ?? ServiceErrorMessages.CannotAdoptOwnPet;
+                        return RedirectToAction("MyPets", "Pets");
+
+                    case ServiceErrorKeys.UserNotAuthenticated:
+                        return Challenge();
+
+                    case ServiceErrorKeys.UserNotFound:
+                        return StatusCode(403);
+
+                    default:
+                        ModelState.AddModelError(string.Empty, result.ErrorMessage ?? ServiceErrorMessages.ValidationFailed);
+                        break;
                 }
+
+                ServiceResult<PetDto> petResult =
+                    await petService.GetByIdAsync(model.PetId);
+
+                if (!petResult.IsSuccess || petResult.Data == null)
+                {
+                    return NotFound();
+                }
+
+                ViewData["PetName"] = string.IsNullOrWhiteSpace(petResult.Data.Name)
+                    ? petResult.Data.Species
+                    : petResult.Data.Name;
 
                 return View(model);
             }
