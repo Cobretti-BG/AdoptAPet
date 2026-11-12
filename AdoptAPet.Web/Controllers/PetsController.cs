@@ -27,6 +27,7 @@
 
             if (!result.IsSuccess || result.Data == null)
             {
+                Response.StatusCode = StatusCodes.Status500InternalServerError;
                 return View("Error");
             }
 
@@ -62,6 +63,7 @@
 
             if (!result.IsSuccess || result.Data == null)
             {
+                Response.StatusCode = StatusCodes.Status500InternalServerError;
                 return View("Error");
             }
 

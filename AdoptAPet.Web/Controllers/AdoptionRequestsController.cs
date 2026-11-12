@@ -182,10 +182,13 @@
             ServiceResult<IReadOnlyCollection<AdoptionRequestDto>> result = await adoptionRequestService
                 .GetByApplicantAsync(currentUserId);
 
+
             if (!result.IsSuccess || result.Data == null)
             {
+                Response.StatusCode = StatusCodes.Status500InternalServerError;
                 return View("Error");
             }
+
 
             IEnumerable<AdoptionRequestViewModel> viewModels = result.Data
                 .Select(request => new AdoptionRequestViewModel
@@ -234,6 +237,7 @@
                     return Forbid();
                 }
 
+                Response.StatusCode = StatusCodes.Status500InternalServerError;
                 return View("Error");
             }
 
