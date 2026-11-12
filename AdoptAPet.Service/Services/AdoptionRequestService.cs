@@ -1,6 +1,7 @@
 ﻿namespace AdoptAPet.Service.Services
 {
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Storage;
 
     using Common;
 
@@ -14,7 +15,6 @@
     using DTOs;
     using Results;
     using Validators;
-    using Microsoft.EntityFrameworkCore.Storage;
 
     public class AdoptionRequestService : IAdoptionRequestService
     {
@@ -31,7 +31,7 @@
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.ValidationFailed,
-                    "Adoption request information is required.");
+                    ServiceErrorMessages.AdoptionRequestInformationRequired);
             }
 
             string? validationErrorCheck = AdoptionRequestInputValidator.Validate(dto);
@@ -47,7 +47,7 @@
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.UserNotAuthenticated,
-                    "A valid user is required to submit an adoption request.");
+                    ServiceErrorMessages.UserNotAuthenticated);
             }
 
             Pet? pet = await context.Pets
@@ -57,21 +57,21 @@
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.PetNotFound,
-                    "The requested pet could not be found.");
+                    ServiceErrorMessages.PetNotFound);
             }
 
             if (pet.OwnerId == applicantId)
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.CannotAdoptOwnPet,
-                    "You cannot submit an adoption request for your own pet.");
+                    ServiceErrorMessages.CannotAdoptOwnPet);
             }
 
             if (pet.Status != PetStatus.Available)
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.PetNotAvailable,
-                    "This pet is not currently available for adoption.");
+                    ServiceErrorMessages.PetNotAvailable);
             }
 
             bool applicantExists = await context.Users
@@ -81,7 +81,7 @@
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.UserNotFound,
-                    "The applicant could not be found.");
+                    ServiceErrorMessages.UserNotFound);
             }
 
             bool hasPendingRequest = await context.AdoptionRequests
@@ -94,7 +94,7 @@
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.DuplicateRequest,
-                    "You already have a pending request for this pet.");
+                    ServiceErrorMessages.DuplicateRequest);
             }
 
             AdoptionRequest request = new AdoptionRequest
@@ -120,7 +120,7 @@
                 return ServiceResult<IReadOnlyCollection<AdoptionRequestDto>>
                     .Failure(
                         ServiceErrorKeys.UserNotAuthenticated,
-                        "A valid user is required to retrieve adoption requests.");
+                        ServiceErrorMessages.UserNotAuthenticated);
             }
 
             IReadOnlyCollection<AdoptionRequestDto> requests = await context.AdoptionRequests
@@ -152,7 +152,7 @@
                 return ServiceResult<IReadOnlyCollection<AdoptionRequestDto>>
                     .Failure(
                         ServiceErrorKeys.UserNotAuthenticated,
-                        "A valid user is required to retrieve adoption requests.");
+                        ServiceErrorMessages.UserNotAuthenticated);
             }
 
             if (petId <= 0)
@@ -160,7 +160,7 @@
                 return ServiceResult<IReadOnlyCollection<AdoptionRequestDto>>
                     .Failure(
                         ServiceErrorKeys.InvalidPetId,
-                        "A valid pet must be selected.");
+                        ServiceErrorMessages.InvalidPetId);
             }
 
             bool petExists = await context.Pets
@@ -171,7 +171,7 @@
                 return ServiceResult<IReadOnlyCollection<AdoptionRequestDto>>
                     .Failure(
                         ServiceErrorKeys.PetNotFound,
-                        "The requested pet could not be found.");
+                        ServiceErrorMessages.PetNotFound);
             }
 
             IReadOnlyCollection<AdoptionRequestDto> requests = await context.AdoptionRequests
@@ -202,14 +202,14 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.UserNotAuthenticated,
-                    "A valid user is required to cancel an adoption request.");
+                    ServiceErrorMessages.UserNotAuthenticated);
             }
 
             if (requestId <= 0)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.InvalidRequestId,
-                    "A valid adoption request must be selected.");
+                    ServiceErrorMessages.InvalidRequestId);
             }
 
             AdoptionRequest? request = await context.AdoptionRequests
@@ -219,21 +219,21 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.RequestNotFound,
-                    "The adoption request could not be found.");
+                    ServiceErrorMessages.RequestNotFound);
             }
 
             if (request.ApplicantId != currentUserId)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.Unauthorized,
-                    "You are not allowed to cancel this adoption request.");
+                    ServiceErrorMessages.Unauthorized);
             }
 
             if (request.Status != AdoptionRequestStatus.Pending)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.RequestNotPending,
-                    "Only pending adoption requests can be cancelled.");
+                    ServiceErrorMessages.RequestCannotBeCancelled);
             }
 
             request.Status = AdoptionRequestStatus.Cancelled;
@@ -243,21 +243,20 @@
             return ServiceResult.Success();
         }
 
-
         public async Task<ServiceResult> RejectAsync(int requestId, string currentUserId)
         {
             if (string.IsNullOrWhiteSpace(currentUserId))
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.UserNotAuthenticated,
-                    "A valid user is required to reject an adoption request.");
+                    ServiceErrorMessages.UserNotAuthenticated);
             }
 
             if (requestId <= 0)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.InvalidRequestId,
-                    "A valid adoption request must be selected.");
+                    ServiceErrorMessages.InvalidRequestId);
             }
 
             AdoptionRequest? request = await context.AdoptionRequests
@@ -268,21 +267,21 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.RequestNotFound,
-                    "The adoption request could not be found.");
+                    ServiceErrorMessages.RequestNotFound);
             }
 
             if (request.Pet.OwnerId != currentUserId)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.Unauthorized,
-                    "You are not allowed to reject this adoption request.");
+                    ServiceErrorMessages.Unauthorized);
             }
 
             if (request.Status != AdoptionRequestStatus.Pending)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.RequestNotPending,
-                    "Only pending adoption requests can be rejected.");
+                    ServiceErrorMessages.RequestCannotBeRejected);
             }
 
             request.Status = AdoptionRequestStatus.Rejected;
@@ -292,21 +291,20 @@
             return ServiceResult.Success();
         }
 
-
         public async Task<ServiceResult> ApproveAsync(int requestId, string currentUserId)
         {
             if (string.IsNullOrWhiteSpace(currentUserId))
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.UserNotAuthenticated,
-                    "A valid user is required to approve an adoption request.");
+                    ServiceErrorMessages.UserNotAuthenticated);
             }
 
             if (requestId <= 0)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.InvalidRequestId,
-                    "A valid adoption request must be selected.");
+                    ServiceErrorMessages.InvalidRequestId);
             }
 
             AdoptionRequest? request = await context.AdoptionRequests
@@ -317,28 +315,28 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.RequestNotFound,
-                    "The adoption request could not be found.");
+                    ServiceErrorMessages.RequestNotFound);
             }
 
             if (request.Pet.OwnerId != currentUserId)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.Unauthorized,
-                    "You are not allowed to approve this adoption request.");
+                    ServiceErrorMessages.Unauthorized);
             }
 
             if (request.Status != AdoptionRequestStatus.Pending)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.RequestNotPending,
-                    "Only pending adoption requests can be approved.");
+                    ServiceErrorMessages.RequestCannotBeApproved);
             }
 
             if (request.Pet.Status != PetStatus.Available)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.PetNotAvailable,
-                    "This pet is no longer available for adoption.");
+                    ServiceErrorMessages.PetNotAvailable);
             }
 
             await using IDbContextTransaction transaction =
@@ -364,6 +362,5 @@
 
             return ServiceResult.Success();
         }
-
     }
 }

@@ -24,14 +24,13 @@
             this.context = context;
         }
 
-
         public async Task<ServiceResult<PetDto>> GetByIdAsync(int id)
         {
             if (id <= 0)
             {
                 return ServiceResult<PetDto>.Failure(
                     ServiceErrorKeys.PetNotFound,
-                    "Invalid pet selection.");
+                    ServiceErrorMessages.PetNotFound);
             }
             Pet? pet = await context.Pets
                 .AsNoTracking()
@@ -41,7 +40,7 @@
             {
                 return ServiceResult<PetDto>.Failure(
                     ServiceErrorKeys.PetNotFound,
-                    "The requested pet could not be found.");
+                    ServiceErrorMessages.PetNotFound);
             }
 
             return ServiceResult<PetDto>.Success(MapToDto(pet));
@@ -68,7 +67,7 @@
             {
                 return ServiceResult<IReadOnlyCollection<PetDto>>.Failure(
                     ServiceErrorKeys.UserNotAuthenticated,
-                    "A valid owner is required.");
+                    ServiceErrorMessages.UserNotAuthenticated);
             }
 
             IEnumerable<Pet> pets = await context.Pets
@@ -89,7 +88,7 @@
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.ValidationFailed,
-                    "Pet information is required.");
+                    ServiceErrorMessages.PetInformationRequired);
             }
 
             string? validationErrorCheck = PetInputValidator.Validate(dto);
@@ -105,7 +104,7 @@
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.UserNotAuthenticated,
-                    "A valid user is required to create a pet listing.");
+                    ServiceErrorMessages.UserNotAuthenticated);
             }
 
             bool ownerExists = await context.Users
@@ -115,7 +114,7 @@
             {
                 return ServiceResult<int>.Failure(
                     ServiceErrorKeys.UserNotFound,
-                    "The specified user could not be found.");
+                    ServiceErrorMessages.UserNotFound);
             }
 
             Pet pet = new Pet
@@ -147,13 +146,13 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.PetNotFound,
-                    "Invalid pet selection.");
+                    ServiceErrorMessages.PetNotFound);
             }
             if (dto == null)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.ValidationFailed,
-                    "Pet information is required.");
+                    ServiceErrorMessages.PetInformationRequired);
             }
 
             string? validationErrorCheck = PetInputValidator.Validate(dto);
@@ -169,7 +168,7 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.UserNotAuthenticated,
-                    "A valid user is required to update a pet listing.");
+                    ServiceErrorMessages.UserNotAuthenticated);
             }
 
             Pet? pet = await context.Pets
@@ -179,21 +178,21 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.PetNotFound,
-                    "The requested pet could not be found.");
+                    ServiceErrorMessages.PetNotFound);
             }
 
             if (pet.OwnerId != currentUserId)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.Unauthorized,
-                    "You are not allowed to update this pet listing.");
+                    ServiceErrorMessages.Unauthorized);
             }
 
             if (pet.Status != PetStatus.Available)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.PetNotAvailable,
-                    "Only available pet listings can be updated.");
+                    ServiceErrorMessages.PetCannotBeUpdated);
             }
 
             pet.Name = NormalizeOptionalText(dto.Name);
@@ -217,7 +216,7 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.UserNotAuthenticated,
-                    "A valid user is required to delete a pet listing.");
+                    ServiceErrorMessages.UserNotAuthenticated);
             }
 
             Pet? pet = await context.Pets
@@ -227,14 +226,14 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.PetNotFound,
-                    "The requested pet could not be found.");
+                    ServiceErrorMessages.PetNotFound);
             }
 
             if (pet.OwnerId != currentUserId)
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.Unauthorized,
-                    "You are not allowed to delete this pet listing.");
+                    ServiceErrorMessages.Unauthorized);
             }
 
             bool hasPendingRequests = await context.AdoptionRequests
@@ -246,7 +245,7 @@
             {
                 return ServiceResult.Failure(
                     ServiceErrorKeys.PetHasAdoptionRequests,
-                    "This pet cannot be deleted while pending adoption requests exist.");
+                    ServiceErrorMessages.PetHasAdoptionRequests);
             }
                         
 

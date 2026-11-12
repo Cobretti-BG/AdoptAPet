@@ -15,7 +15,5 @@
         public const string DuplicateRequest = "DuplicateRequest";
         public const string InvalidPetId = "InvalidPetId";
         public const string RequestNotPending = "RequestNotPending";
-
-
     }
 }
