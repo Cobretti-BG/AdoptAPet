@@ -78,10 +78,14 @@
     </header>
 
     <div class="app-content">
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main">
+        <div class="container pt-3">
+            <partial name="_Notification" />
+        </div>
+
+        @RenderBody()
+    </main>
+</div>
 
     <footer class="border-top footer text-muted">
         <div class="container py-3">
