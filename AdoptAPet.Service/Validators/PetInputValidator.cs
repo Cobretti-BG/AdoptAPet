@@ -134,7 +134,7 @@
             if (dateOfBirth.HasValue &&
                 dateOfBirth.Value.Date > DateTime.UtcNow.Date)
             {
-                return "The date of birth cannot be in the future. Right? :)";
+                return "Date of birth cannot be in the future.";
             }
 
             return null;
